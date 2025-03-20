@@ -37,8 +37,25 @@ final class PostController extends AbstractController
             $artistName = $form->getData()["ArtistName"];
             $artistData = $apiClient->searchArtist($artistName)['data'][0];
 
+            $post = new Post();
 
-            dd($artistData);
+            $post->setArtistId($artistData['id']);
+            $post->setArtistName($artistData['name']);
+            $post->setArtistLink($artistData['link']);
+            $post->setArtistPicture($artistData['picture']);
+            $post->setArtistDeezerPictureSmall($artistData['picture_small']);
+            $post->setArtistDeezerPictureMedium($artistData['picture_medium']);
+            $post->setArtistDeezerPictureBig($artistData['picture_big']);
+            $post->setArtistDeezerPictureXl($artistData['picture_xl']);
+            $post->setArtistDeezerNbAlbums($artistData['nb_album']);
+            $post->setArtistDeezerNbFans($artistData['nb_fan']);
+            $post->setArtistDeezerRadio($artistData['radio']);
+            $post->setArtistDeezerTracklist($artistData['tracklist']);
+            $post->setArtistDeezerType($artistData['type']);
+            $post->setAuthor($this->getUser());
+            $post->setCreationDate(new \DateTime());
+
+
             // $entityManager->persist($post);
             // $entityManager->flush();
 
