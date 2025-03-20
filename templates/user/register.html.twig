@@ -1,0 +1,21 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Add User{% endblock %}
+
+{% block body %}
+  <h1>Add User</h1>
+
+  {{ form_start(form, {'attr': {'data-turbo':'false'}}) }}
+    <div>
+      {{ form_label(form.email) }}
+      {{ form_widget(form.email) }}
+      {{ form_errors(form.email) }}
+    </div>
+    <div>
+      {{ form_label(form.password) }}
+      {{ form_widget(form.password) }}
+      {{ form_errors(form.password) }}
+    </div>
+    <button class="btn btn-primary">{{ button_label|default('Save') }}</button>
+  {{ form_end(form) }}
+{% endblock %}
