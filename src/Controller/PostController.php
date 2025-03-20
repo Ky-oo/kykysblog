@@ -55,11 +55,10 @@ final class PostController extends AbstractController
             $post->setAuthor($this->getUser());
             $post->setCreationDate(new \DateTime());
 
+            $entityManager->persist($post);
+            $entityManager->flush();
 
-            // $entityManager->persist($post);
-            // $entityManager->flush();
-
-            return $this->redirectToRoute('app_post_creation_artists', [], Response::HTTP_SEE_OTHER);
+            return $this->redirectToRoute('app_post_index', [], Response::HTTP_SEE_OTHER);
         }
 
         return $this->render('post/new.html.twig', [

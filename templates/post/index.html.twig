@@ -1,22 +1,30 @@
 {% extends 'base.html.twig' %}
 
-{% block title %}Articles{% endblock %}
+{% block title %}Articles sur les Artistes{% endblock %}
 
 {% block body %}
 <div class="container mt-5">
-    <h1 class="mb-4 text-center">Our latests articles</h1>
+    <h1 class="mb-4 text-center">Artists</h1>
 
     {% if posts is not empty %}
         <div class="row">
             {% for post in posts %}
                 <div class="col-md-6 col-lg-4 mb-4">
                     <div class="card shadow-sm h-100">
+                        <img src="{{ post.ArtistDeezerPictureMedium }}" class="card-img-top" alt="{{ post.ArtistName }}">
                         <div class="card-body">
-                            <h5 class="card-title">{{ post.title }}</h5>
-                            <p class="card-text text-truncate">{{ post.content|raw }}</p>
-                            <p class="text-muted small mb-2">Par : {{ post.author ? post.author.username : 'Auteur inconnu' }}</p>
-                            <p class="text-muted small">{{ post.creationDate ? post.creationDate|date('d M Y') : '' }}</p>
-                            <a href="{{ path('app_post_show', {'id': post.id}) }}" class="btn btn-primary btn-sm">Lire plus</a>
+                            <h5 class="card-title">{{ post.ArtistName }}</h5>
+                            <p class="card-text text-muted">Author : {{ post.author ? post.author.email : 'Auteur inconnu' }}</p>
+                            <p class="card-text small text-muted">Creation date : {{ post.creationDate ? post.creationDate|date('d M Y') : '' }}</p>
+
+                            <ul class="list-group list-group-flush">
+                                <li class="list-group-item">Number albums : {{ post.ArtistDeezerNbAlbums }}</li>
+                                <li class="list-group-item">Number fans : {{ post.ArtistDeezerNbFans }}</li>
+                                <li class="list-group-item">Available on deezer radio : {{ post.ArtistDeezerRadio ? 'Yes' : 'No' }}</li>
+                            </ul>
+
+                            <a href="{{ path('app_post_show', {'id': post.id}) }}" class="btn btn-primary mt-2">See more</a>
+                            <a href="{{ post.ArtistLink }}" class="btn btn-outline-secondary mt-2" target="_blank">See on Deezer</a>
                         </div>
                     </div>
                 </div>
@@ -24,7 +32,7 @@
         </div>
     {% else %}
         <div class="alert alert-warning text-center" role="alert">
-            Aucun article n'a été trouvé.
+            Aucun artiste trouvé.
         </div>
     {% endif %}
 
