@@ -13,6 +13,7 @@ use Symfony\Component\Routing\Attribute\Route;
 use App\Form\CreatePostArtistType;
 use App\Service\ApiClient;
 
+#[Route('/')]
 #[Route('/post')]
 final class PostController extends AbstractController
 {
