@@ -25,13 +25,9 @@ class PdfService
 
     $dompdf = new Dompdf($options);
 
-    $css = file_get_contents($this->params->get('kernel.project_dir') . '/public/styles/css/bootstrap.min.css');
     $html = $this->twig->render('post/show_pdf.html.twig', [
       'post' => $post,
     ]);
-
-    $html = '<style>' . $css . '</style>' . $html;
-
 
     $dompdf->loadHtml($html);
     $dompdf->setPaper('A4', 'portrait');
