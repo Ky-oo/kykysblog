@@ -3,7 +3,6 @@
 namespace App\Controller;
 
 use App\Entity\Post;
-use App\Form\PostType;
 use App\Repository\PostRepository;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
@@ -89,7 +88,7 @@ final class PostController extends AbstractController
             return $this->redirectToRoute('app_product');
         }
 
-        $form = $this->createForm(PostType::class, $post);
+        $form = $this->createForm(CreatePostArtistType::class, $post);
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
