@@ -1,0 +1,127 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Artist Post</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 30px;
+            font-size: 14px;
+        }
+        h1, h2 {
+            margin-bottom: 10px;
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-bottom: 20px;
+        }
+        th, td {
+            border: 1px solid #aaa;
+            padding: 8px;
+            text-align: left;
+        }
+        .section {
+            margin-bottom: 40px;
+        }
+        .center {
+            text-align: center;
+        }
+        img {
+            max-width: 250px;
+            max-height: 250px;
+            display: block;
+            margin: 0 auto;
+        }
+        .comment {
+            border: 1px solid #ccc;
+            padding: 10px;
+            margin-bottom: 10px;
+        }
+        .small {
+            font-size: 12px;
+            color: #555;
+        }
+    </style>
+</head>
+<body>
+
+    <div class="section">
+        <h1>Artist Details</h1>
+        <p>Discover more about your favorite artist!</p>
+    </div>
+
+    <div class="section">
+        <h2>Post Information</h2>
+        <table>
+            <tr>
+                <th>Post ID</th>
+                <td>{{ post.id }}</td>
+            </tr>
+            <tr>
+                <th>Creation Date</th>
+                <td>{{ post.creationDate ? post.creationDate|date('Y-m-d H:i') : 'N/A' }}</td>
+            </tr>
+            <tr>
+                <th>Author</th>
+                <td>{{ post.author ? post.author.email : 'Anonymous' }}</td>
+            </tr>
+        </table>
+    </div>
+
+    <div class="section">
+        <h2>Artist Information</h2>
+        <div class="center">
+            <img src="{{ post.ArtistPicture }}" alt="Artist Picture">
+        </div>
+        <table>
+            <tr>
+                <th>Artist Name</th>
+                <td>{{ post.ArtistName }}</td>
+            </tr>
+            <tr>
+                <th>Deezer Albums</th>
+                <td>{{ post.ArtistDeezerNbAlbums }}</td>
+            </tr>
+            <tr>
+                <th>Deezer Fans</th>
+                <td>{{ post.ArtistDeezerNbFans }}</td>
+            </tr>
+            <tr>
+                <th>Radio Available</th>
+                <td>{{ post.ArtistDeezerRadio ? 'Yes' : 'No' }}</td>
+            </tr>
+            <tr>
+                <th>Tracklist</th>
+                <td>{{ post.ArtistDeezerTracklist }}</td>
+            </tr>
+            <tr>
+                <th>Artist Link</th>
+                <td>{{ post.ArtistLink }}</td>
+            </tr>
+            <tr>
+                <th>Deezer Type</th>
+                <td>{{ post.ArtistDeezerType }}</td>
+            </tr>
+        </table>
+    </div>
+
+    <div class="section">
+        <h2>Comments</h2>
+
+        {% if post.getComments|length > 0 %}
+            {% for comment in post.getComments %}
+                <div class="comment">
+                    <strong>{{ comment.author ? comment.author.email : 'Anonymous' }}</strong>
+                    <div class="small">{{ comment.creationDate ? comment.creationDate|date('Y-m-d H:i') : '' }}</div>
+                    <p>{{ comment.content }}</p>
+                </div>
+            {% endfor %}
+        {% else %}
+            <p>No comments yet. Be the first to leave one!</p>
+        {% endif %}
+    </div>
+
+</body>
+</html>

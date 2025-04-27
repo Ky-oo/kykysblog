@@ -14,6 +14,7 @@ use App\Service\ApiClient;
 use Symfony\Bundle\SecurityBundle\Security;
 use App\Form\AddCommentType;
 use App\Entity\Comment;
+use App\Service\PdfService;
 
 final class PostController extends AbstractController
 {
@@ -115,6 +116,16 @@ final class PostController extends AbstractController
             $entityManager->remove($post);
             $entityManager->flush();
         }
+
+        return $this->redirectToRoute('app_post_index', [], Response::HTTP_SEE_OTHER);
+    }
+
+    #[Route('/post/{postId}/pdf', name: 'app_post_pdf', methods: ['GET'])]
+    public function pdf(Request $request, EntityManagerInterface $entityManager, PdfService $pdfService): Response
+    {
+        $postId = $request->get('postId');
+        $post = $entityManager->getRepository(Post::class)->find($postId);
+        $pdfService->generateArticlePdf($post, $this->getParameter('kernel.project_dir') . '/public/pdf/' . $post->getId() . '.pdf');
 
         return $this->redirectToRoute('app_post_index', [], Response::HTTP_SEE_OTHER);
     }
