@@ -63,8 +63,38 @@
     {% if isAdminOrAuthor %}
         <a href="{{ path('app_post_edit', {'id': post.id}) }}">edit</a>
     {{ include('post/_delete_form.html.twig') }}
-
     {% endif %}
 
+    <div class="comments-section mt-5">
+        <h2>Comments</h2>
+        {% if post.getComments|length > 0 %}
+            <div class="list-group">
+                {% for comment in post.getComments %}
+                    <div class="list-group-item">
+                        <h5 class="mb-1">{{ comment.author ? comment.author.email : 'Anonymous' }}</h5>
+                        <p class="mb-1">{{ comment.content }}</p>
+                        <small class="text-muted">{{ comment.creationDate ? comment.creationDate|date('Y-m-d H:i:s') : '' }}</small>
+                    </div>
+                {% endfor %}
+            </div>
+        {% else %}
+            <p>No comments yet.</p>
+        {% endif %}
+    </div>
+
+    {% if app.user %}
+        <div class="add-comment-section mt-5">
+            <h2>Add a Comment</h2>
+            {{ form_start(commentForm, {'action': path('app_post_add_comment', {'postId': post.id}), 'method': 'POST'}) }}
+                {{ form_widget(commentForm) }}
+                <button type="submit" class="btn btn-primary">Submit</button>
+            {{ form_end(commentForm) }}
+        </div>
+    {% else %}
+        <div class="alert alert-info mt-5">
+            <p>You need to be logged in to add a comment.</p>
+            <a href="{{ path('app_login') }}" class="btn btn-primary">Login</a>
+        </div>
+    {% endif %}
 
 {% endblock %}

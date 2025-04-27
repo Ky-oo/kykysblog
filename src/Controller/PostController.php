@@ -13,6 +13,8 @@ use Symfony\Component\Routing\Attribute\Route;
 use App\Form\CreatePostArtistType;
 use App\Service\ApiClient;
 use Symfony\Bundle\SecurityBundle\Security;
+use App\Form\AddCommentType;
+use App\Entity\Comment;
 
 final class PostController extends AbstractController
 {
@@ -75,6 +77,7 @@ final class PostController extends AbstractController
         return $this->render('post/show.html.twig', [
             'post' => $post,
             'isAdminOrAuthor' => $isAdminOrAuthor,
+            'commentForm' => $this->createForm(AddCommentType::class, new Comment())->createView(),
         ]);
     }
 
