@@ -1,100 +1,148 @@
 {% extends 'base.html.twig' %}
 
-{% block title %}Post{% endblock %}
+{% block title %}Artist Post{% endblock %}
 
 {% block body %}
-    <h1>Post</h1>
+<div class="container mt-5">
 
-    <table class="table">
-        <tbody>
-            <tr>
-                <th>Id</th>
-                <td>{{ post.id }}</td>
-            </tr>
-            <tr>
-                <th>Creation Date</th>
-                <td>{{ post.creationDate ? post.creationDate|date('Y-m-d H:i:s') : '' }}</td>
-            </tr>
-            <tr>
-                <th>Author</th>
-                <td>{{ post.author ? post.author.email : 'N/A' }}</td>
-            </tr>
-            <tr>
-                <th>Artist Id</th>
-                <td>{{ post.ArtistId }}</td>
-            </tr>
-            <tr>
-                <th>Artist Name</th>
-                <td>{{ post.ArtistName }}</td>
-            </tr>
-            <tr>
-                <th>Artist Picture</th>
-                <td><img src="{{ post.ArtistPicture }}" alt="Artist Picture" style="max-width: 200px;"></td>
-            </tr>
-            <tr>
-                <th>Deezer Nb Albums</th>
-                <td>{{ post.ArtistDeezerNbAlbums }}</td>
-            </tr>
-            <tr>
-                <th>Deezer Nb Fans</th>
-                <td>{{ post.ArtistDeezerNbFans }}</td>
-            </tr>
-            <tr>
-                <th>Deezer Radio</th>
-                <td>{{ post.ArtistDeezerRadio ? 'Yes' : 'No' }}</td>
-            </tr>
-            <tr>
-                <th>Deezer Tracklist</th>
-                <td><a href="{{ post.ArtistDeezerTracklist }}" target="_blank">View Tracklist</a></td>
-            </tr>
-            <tr>
-                <th>Artist Link</th>
-                <td><a href="{{ post.ArtistLink }}" target="_blank">Visit Artist</a></td>
-            </tr>
-            <tr>
-                <th>Deezer Type</th>
-                <td>{{ post.ArtistDeezerType }}</td>
-            </tr>
-        </tbody>
-    </table>
+    <div class="mb-4">
+        <h1 class="display-4">Artist Details</h1>
+        <p class="lead">Discover more about your favorite artist!</p>
+    </div>
 
-    <a href="{{ path('app_post_index') }}">back to list</a>
+    <div class="card shadow-sm mb-5">
+        <div class="card-body">
+            <h2 class="h4 mb-4">Post Information</h2>
+            <table class="table table-striped">
+                <tbody>
+                    <tr>
+                        <th>Post ID</th>
+                        <td>{{ post.id }}</td>
+                    </tr>
+                    <tr>
+                        <th>Creation Date</th>
+                        <td>{{ post.creationDate ? post.creationDate|date('Y-m-d H:i') : 'N/A' }}</td>
+                    </tr>
+                    <tr>
+                        <th>Author</th>
+                        <td>{{ post.author ? post.author.email : 'Anonymous' }}</td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
 
-    {% if isAdminOrAuthor %}
-        <a href="{{ path('app_post_edit', {'id': post.id}) }}">edit</a>
-    {{ include('post/_delete_form.html.twig') }}
-    {% endif %}
+    <div class="card shadow-sm mb-5">
+        <div class="card-body">
+            <h2 class="h4 mb-4">Artist Information</h2>
+            <div class="row">
+                <div class="col-md-4 text-center mb-4">
+                    <img src="{{ post.ArtistPicture }}" alt="Artist Picture" class="img-fluid rounded" style="max-height: 250px;">
+                </div>
+                <div class="col-md-8">
+                    <table class="table table-borderless">
+                        <tbody>
+                            <tr>
+                                <th>Artist Name</th>
+                                <td>{{ post.ArtistName }}</td>
+                            </tr>
+                            <tr>
+                                <th>Deezer Albums</th>
+                                <td>{{ post.ArtistDeezerNbAlbums }}</td>
+                            </tr>
+                            <tr>
+                                <th>Deezer Fans</th>
+                                <td>{{ post.ArtistDeezerNbFans }}</td>
+                            </tr>
+                            <tr>
+                                <th>Radio Available</th>
+                                <td>{{ post.ArtistDeezerRadio ? 'Yes' : 'No' }}</td>
+                            </tr>
+                            <tr>
+                                <th>Tracklist</th>
+                                <td><a href="{{ post.ArtistDeezerTracklist }}" target="_blank" class="btn btn-outline-primary btn-sm">View Tracklist</a></td>
+                            </tr>
+                            <tr>
+                                <th>Artist Link</th>
+                                <td><a href="{{ post.ArtistLink }}" target="_blank" class="btn btn-outline-secondary btn-sm">Visit Artist</a></td>
+                            </tr>
+                            <tr>
+                                <th>Deezer Type</th>
+                                <td>{{ post.ArtistDeezerType }}</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="d-flex justify-content-between mb-5">
+        <a href="{{ path('app_post_index') }}" class="btn btn-secondary">← Back to list</a>
+        {% if isAdminOrAuthor %}
+            <div>
+                <a href="{{ path('app_post_edit', {'id': post.id}) }}" class="btn btn-warning me-2">Edit</a>
+                {{ include('post/_delete_form.html.twig') }}
+            </div>
+        {% endif %}
+    </div>
 
     <div class="comments-section mt-5">
-        <h2>Comments</h2>
+        <h2 class="h3 mb-4">Comments</h2>
+
         {% if post.getComments|length > 0 %}
             <div class="list-group">
                 {% for comment in post.getComments %}
-                    <div class="list-group-item">
-                        <h5 class="mb-1">{{ comment.author ? comment.author.email : 'Anonymous' }}</h5>
+                    <div class="list-group-item list-group-item-action flex-column align-items-start">
+                        <div class="d-flex w-100 justify-content-between">
+                            <h5 class="mb-1">{{ comment.author ? comment.author.email : 'Anonymous' }}</h5>
+                            <small>{{ comment.creationDate ? comment.creationDate|date('Y-m-d H:i') : '' }}</small>
+                        </div>
                         <p class="mb-1">{{ comment.content }}</p>
-                        <small class="text-muted">{{ comment.creationDate ? comment.creationDate|date('Y-m-d H:i:s') : '' }}</small>
+                        <a href="{{ path('app_comment_delete', {'id': comment.id}) }}" class="btn btn-danger btn-sm">Delete</a>
                     </div>
                 {% endfor %}
             </div>
         {% else %}
-            <p>No comments yet.</p>
+            <div class="alert alert-info" role="alert">
+                No comments yet. Be the first to leave one!
+            </div>
         {% endif %}
     </div>
 
     {% if app.user %}
-        <div class="add-comment-section mt-5">
-            <h2>Add a Comment</h2>
-            {{ form_start(commentForm, {'action': path('app_post_add_comment', {'postId': post.id}), 'method': 'POST'}) }}
-                {{ form_widget(commentForm) }}
-                <button type="submit" class="btn btn-primary">Submit</button>
-            {{ form_end(commentForm) }}
+        <div class="add-comment-section my-5">
+            <h2 class="h3 mb-4">Leave a Comment</h2>
+
+            <div class="card shadow-sm">
+                <div class="card-body">
+                    {{ form_start(commentForm, {
+                        'action': path('app_post_add_comment', {'postId': post.id}),
+                        'method': 'POST'
+                    }) }}
+
+                    <div class="mb-3">
+                        {{ form_label(commentForm.content, 'Your Comment', {'label_attr': {'class': 'form-label'}}) }}
+                        {{ form_widget(commentForm.content, {'attr': {'class': 'form-control', 'rows': '5', 'placeholder': 'Share your thoughts...'}}) }}
+                    </div>
+
+                    <div class="text-end">
+                        <button type="submit" class="btn btn-success">
+                            <i class="bi bi-chat-dots"></i> Post Comment
+                        </button>
+                    </div>
+
+                    {{ form_end(commentForm) }}
+                </div>
+            </div>
         </div>
     {% else %}
-        <div class="alert alert-info mt-5">
-            <p>You need to be logged in to add a comment.</p>
+        <div class="alert alert-warning mt-5 text-center">
+            <p><strong>You must be logged in to leave a comment.</strong></p>
             <a href="{{ path('app_login') }}" class="btn btn-primary">Login</a>
         </div>
     {% endif %}
 
+
+</div>
 {% endblock %}

@@ -41,17 +41,15 @@ final class CommentController extends AbstractController
         return $this->redirectToRoute('app_post_show', ['id' => $postId]);
     }
 
-    #[Route('/comment/{id}/delete', name: 'app_comment_delete', methods: ['POST'])]
+    #[Route('/comment/{id}/delete', name: 'app_comment_delete', methods: ['GET'])]
     public function deleteComment(Comment $comment, Request $request, EntityManagerInterface $entityManager): Response
     {
         if ($comment->getAuthor() !== $this->getUser()) {
             return $this->redirectToRoute('app_post_show', ['id' => $comment->getPost()->getId()]);
         }
 
-        if ($this->isCsrfTokenValid('delete' . $comment->getId(), $request->request->get('_token'))) {
-            $entityManager->remove($comment);
-            $entityManager->flush();
-        }
+        $entityManager->remove($comment);
+        $entityManager->flush();
 
         return $this->redirectToRoute('app_post_show', ['id' => $comment->getPost()->getId()]);
     }
