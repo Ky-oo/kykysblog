@@ -12,17 +12,18 @@ use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Attribute\Route;
 use App\Form\CreatePostArtistType;
 use App\Service\ApiClient;
+use Symfony\Bundle\SecurityBundle\Security;
 
-#[Route('/')]
-#[Route('/post')]
 final class PostController extends AbstractController
 {
-    #[Route(name: 'app_post_index', methods: ['GET'])]
+    #[Route('/', name: 'app_post_index', methods: ['GET'])]
+    #[Route('/post', name: 'app_post_index', methods: ['GET'])]
     public function index(PostRepository $postRepository): Response
     {
         $posts = $postRepository->findBy([], ['creationDate' => 'DESC']);
 
         return $this->render('post/index.html.twig', [
+            "isAdmin" => $this->isGranted('ROLE_ADMIN'),
             'posts' => $posts,
         ]);
     }
@@ -67,15 +68,17 @@ final class PostController extends AbstractController
         ]);
     }
 
-    #[Route('/{id}', name: 'app_post_show', methods: ['GET'])]
-    public function show(Post $post): Response
+    #[Route('/post/{id}', name: 'app_post_show', methods: ['GET'])]
+    public function show(Post $post, Security $security): Response
     {
+        $isAdminOrAuthor = $this->isGranted('ROLE_ADMIN') || $post->getAuthor() === $security->getUser();
         return $this->render('post/show.html.twig', [
             'post' => $post,
+            'isAdminOrAuthor' => $isAdminOrAuthor,
         ]);
     }
 
-    #[Route('/{id}/edit', name: 'app_post_edit', methods: ['GET', 'POST'])]
+    #[Route('/post/{id}/edit', name: 'app_post_edit', methods: ['GET', 'POST'])]
     public function edit(Request $request, Post $post, EntityManagerInterface $entityManager): Response
     {
 
@@ -98,7 +101,7 @@ final class PostController extends AbstractController
         ]);
     }
 
-    #[Route('/{id}', name: 'app_post_delete', methods: ['POST'])]
+    #[Route('/post/{id}', name: 'app_post_delete', methods: ['POST'])]
     public function delete(Request $request, Post $post, EntityManagerInterface $entityManager): Response
     {
 

@@ -23,6 +23,7 @@ final class UserController extends AbstractController
         ]);
     }
 
+    //email admin: admin@admin.com // mdp: adminadmin
     #[Route('/user/register', name: 'app_user_register')]
     public function addUser(EntityManagerInterface $entityManager, Request $request, UserPasswordHasherInterface $PasswordHasher): Response
     {

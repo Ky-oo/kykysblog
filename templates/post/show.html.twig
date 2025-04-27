@@ -12,23 +12,59 @@
                 <td>{{ post.id }}</td>
             </tr>
             <tr>
-                <th>Title</th>
-                <td>{{ post.title }}</td>
-            </tr>
-            <tr>
-                <th>Content</th>
-                <td>{{ post.content }}</td>
-            </tr>
-            <tr>
-                <th>CreationDate</th>
+                <th>Creation Date</th>
                 <td>{{ post.creationDate ? post.creationDate|date('Y-m-d H:i:s') : '' }}</td>
+            </tr>
+            <tr>
+                <th>Author</th>
+                <td>{{ post.author ? post.author.email : 'N/A' }}</td>
+            </tr>
+            <tr>
+                <th>Artist Id</th>
+                <td>{{ post.ArtistId }}</td>
+            </tr>
+            <tr>
+                <th>Artist Name</th>
+                <td>{{ post.ArtistName }}</td>
+            </tr>
+            <tr>
+                <th>Artist Picture</th>
+                <td><img src="{{ post.ArtistPicture }}" alt="Artist Picture" style="max-width: 200px;"></td>
+            </tr>
+            <tr>
+                <th>Deezer Nb Albums</th>
+                <td>{{ post.ArtistDeezerNbAlbums }}</td>
+            </tr>
+            <tr>
+                <th>Deezer Nb Fans</th>
+                <td>{{ post.ArtistDeezerNbFans }}</td>
+            </tr>
+            <tr>
+                <th>Deezer Radio</th>
+                <td>{{ post.ArtistDeezerRadio ? 'Yes' : 'No' }}</td>
+            </tr>
+            <tr>
+                <th>Deezer Tracklist</th>
+                <td><a href="{{ post.ArtistDeezerTracklist }}" target="_blank">View Tracklist</a></td>
+            </tr>
+            <tr>
+                <th>Artist Link</th>
+                <td><a href="{{ post.ArtistLink }}" target="_blank">Visit Artist</a></td>
+            </tr>
+            <tr>
+                <th>Deezer Type</th>
+                <td>{{ post.ArtistDeezerType }}</td>
             </tr>
         </tbody>
     </table>
 
     <a href="{{ path('app_post_index') }}">back to list</a>
 
-    <a href="{{ path('app_post_edit', {'id': post.id}) }}">edit</a>
-
+    {% if isAdminOrAuthor %}
+        <a href="{{ path('app_post_edit', {'id': post.id}) }}">edit</a>
     {{ include('post/_delete_form.html.twig') }}
+
+    {% endif %}
+
+
 {% endblock %}
