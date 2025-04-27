@@ -21,6 +21,6 @@ final class IsCreatorVoter extends Voter
         if (!$user instanceof UserInterface) {
             return false;
         }
-        return $user === $subject->getUser() || in_array('ROLE_ADMIN', $user->getRoles());
+        return $user === $subject->getAuthor() || in_array('ROLE_ADMIN', $user->getRoles());
     }
 }
