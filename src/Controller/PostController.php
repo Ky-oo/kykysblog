@@ -14,8 +14,8 @@ use App\Service\ApiClient;
 use Symfony\Bundle\SecurityBundle\Security;
 use App\Form\AddCommentType;
 use App\Entity\Comment;
-use App\Service\PdfService;
-
+use Symfony\Component\Messenger\MessageBusInterface;
+use App\Message\CreatePdf;
 final class PostController extends AbstractController
 {
     #[Route('/', name: 'app_post_index', methods: ['GET'])]
@@ -121,11 +121,11 @@ final class PostController extends AbstractController
     }
 
     #[Route('/post/{postId}/pdf', name: 'app_post_pdf', methods: ['GET'])]
-    public function pdf(Request $request, EntityManagerInterface $entityManager, PdfService $pdfService): Response
+    public function pdf(Request $request, EntityManagerInterface $entityManager, MessageBusInterface $bus): Response
     {
         $postId = $request->get('postId');
-        $post = $entityManager->getRepository(Post::class)->find($postId);
-        $pdfService->generateArticlePdf($post, $this->getParameter('kernel.project_dir') . '/public/pdf/' . $post->getId() . '.pdf');
+        $outputPath = $this->getParameter('kernel.project_dir') . '/public/pdf/' . $postId . '.pdf';
+        $bus->dispatch(new CreatePdf($postId, $outputPath));
 
         return $this->redirectToRoute('app_post_index', [], Response::HTTP_SEE_OTHER);
     }
