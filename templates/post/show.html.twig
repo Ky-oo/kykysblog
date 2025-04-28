@@ -102,7 +102,9 @@
                             <small>{{ comment.creationDate ? comment.creationDate|date('Y-m-d H:i') : '' }}</small>
                         </div>
                         <p class="mb-1">{{ comment.content }}</p>
-                        <a href="{{ path('app_comment_delete', {'id': comment.id}) }}" class="btn btn-danger btn-sm">Delete</a>
+                        {% if isAdminOrAuthor or comment.author == app.user %}
+                            <a href="{{ path('app_comment_delete', {'id': comment.id}) }}" class="btn btn-danger btn-sm">Delete</a>
+                        {% endif %}
                     </div>
                 {% endfor %}
             </div>
