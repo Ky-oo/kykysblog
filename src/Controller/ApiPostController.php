@@ -116,7 +116,7 @@ class ApiPostController extends AbstractController
     }
   }
 
-  #[Route(path: 'admin/{id}', name: 'delete', methods: ['DELETE'])]
+  #[Route(path: '/admin/{id}', name: 'delete', methods: ['DELETE'])]
   public function delete(Post $post, EntityManagerInterface $entityManager): JsonResponse
   {
     try {
